@@ -10,28 +10,26 @@
     <style>
 
         .containerfire {
-            margin: 0;
-            padding: 0;
+            margin: 5;
             box-sizing: border-box;
 
 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
+            min-height: 95vh;
 
             max-width: 2400px;
             margin: 0 auto;
             background: white;
             border-radius: 20px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            padding: 40px;
+            padding: 10px;
         }
 
         .containerfire h1 {
             text-align: center;
             color: #667eea;
-            margin-bottom: 30px;
+            margin-bottom: 10px;
             font-size: 2.5em;
         }
 
@@ -156,35 +154,46 @@
             font-family: 'Courier New', monospace;
         }
 
-
         .containerfire table {
             font-size: 0.85em;
         }
+/* 🌟 첫 번째 컬럼 고정 핵심 스타일 🌟 */
+        .containerfire th:first-child,
+        .containerfire td:first-child {
+            position: sticky; /* 고정 위치 설정 */
+            left: 0; /* 왼쪽 끝에 고정 */
+            z-index: 2; /* 스크롤되는 다른 셀 위에 표시 */
 
-
-/*
-        @media (max-width: 768px) {
-            .container {
-                padding: 20px;
-            }
-
-            h1 {
-                font-size: 1.8em;
-            }
-
-            .input-section {
-                padding: 20px;
-            }
-
-            table {
-                font-size: 0.85em;
-            }
-
-            th, td {
-                padding: 8px 5px;
-            }
         }
-            */
+
+        /* 헤더 셀 고정 시 배경과 그림자 설정 */
+        .containerfire th:first-child {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* 배경색 유지 */
+            box-shadow: 2px 0 3px rgba(0, 0, 0, 0.1); /* 고정 경계에 그림자 추가 */
+        }
+
+        /* 데이터 셀 고정 시 배경과 그림자 설정 */
+        .containerfire td:first-child {
+            background-color: #f8f9fa; /* 배경색: 테이블 배경과 비슷하게 설정 */
+            box-shadow: 2px 0 3px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 0년차 행의 고정된 셀에 대한 배경 처리 */
+        .containerfire #resultBody tr:first-child td:first-child {
+            background-color: white;
+        }
+
+        /* FIRE 달성 행의 배경색과 고정 셀의 배경색 통일 */
+        .containerfire .fire-yes td:first-child {
+            background-color: #d4edda !important;
+        }
+
+        .containerfire .explain {
+            text-align: left;
+            color: #6c757d;
+            margin-top: 10px;
+            font-size: 0.85em;
+        }
     </style>
     <div class="containerfire">
         <h1>🔥 FIRE 계산기</h1>
@@ -224,7 +233,7 @@
         </div>
 
         <div id="error" style="display:none;" class="error"></div>
-        <div id="explainadd" class="explain"><h6>수입, 지출:반올림하여 표시</h6></div>
+        <div id="explainadd" class="explain"><h6>수입, 지출:반올림하여 표시 (만원)<br> 필요 자산: 4%rule 적용</h6></div>
 
         <div class="table-container">
             <table id="resultTable">
@@ -249,6 +258,29 @@
     <script>
         function formatNumber(num) {
             return Math.round(num * 100) / 100;
+        }
+
+        function setInitialValuesFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            // 쿼리 파라미터와 해당 input 필드의 ID 매핑
+            const paramMap = {
+                'income_param': 'income',
+                'expense_param': 'expense',
+                'income_rate_param': 'incomeRate',
+                'inflation_rate_param': 'inflationRate',
+                'assets_param': 'assets',
+                'asset_return_param': 'assetReturn'
+            };
+
+            for (const paramName in paramMap) {
+                const inputId = paramMap[paramName];
+                const paramValue = urlParams.get(paramName);
+
+                if (paramValue !== null && paramValue.trim() !== '' && !isNaN(paramValue)) {
+                    // 값이 유효하면 해당 input 필드에 설정
+                    document.getElementById(inputId).value = paramValue;
+                }
+            }
         }
 
         function calculate() {
@@ -278,6 +310,7 @@
             let currentExpense = expense;
             let currentAssets = initialAssets;
             let fireYear = -1;
+            let requiredMonth = 12;
 
             // 0년차 계산
             const requiredAssets0 = expense * 12 / (assetReturn - 1);
@@ -326,6 +359,7 @@
                     }
                 }
 
+
                 // 최소 5년은 표시
                 if (year <= 5 || fireYear === -1 || year <= fireYear + 1) {
                     const row = resultBody.insertRow();
@@ -336,6 +370,28 @@
                     const roundedAssetGrowth = Math.round(assetGrowth); // 반올림
                     const roundedTotalAssets = Math.round(totalAssets); // 반올림
                     const roundedRequiredAssets = Math.round(requiredAssets); // 반올림
+                    /*
+                    console.log(year);
+                    console.log((currentAssets)  - requiredAssets)
+                    console.log(currentAssets);
+                    console.log(monthlySavings);
+                    console.log("_______");
+                    */
+
+                    let monthlyassets = currentAssets;
+                    for(let imonth=0; imonth<12; imonth++){
+                        monthlyassets = monthlyassets * (1+ (assetReturn-1)/12) + monthlySavings;
+                        //console.log(imonth + ": " + monthlyassets + " / " + requiredAssets);
+                        if(monthlyassets >= requiredAssets){
+                            //console.log("목표 달성!" + (imonth+1) + "개월차");
+                            requiredMonth = imonth + 1;
+                            console.log(requiredMonth)
+                            break;
+                        }
+                    }
+                    // console.log(requiredMonth)
+                    const addtext = year === fireYear ? "<br>" + requiredMonth +"개월부터" : "";
+
                     row.innerHTML = `
                         <td>${year}년</td>
                         <td class="number">${roundedCurrentIncome.toLocaleString()}</td>
@@ -344,23 +400,45 @@
                         <td class="number">${roundedAssetGrowth.toLocaleString()}</td>
                         <td class="number">${roundedTotalAssets.toLocaleString()}</td>
                         <td class="number">${roundedRequiredAssets.toLocaleString()}</td>
-                        <td class="${isFire ? 'fire-yes' : 'fire-no'}">${isFire ? 'FIRE!' : '출근'}</td>
+                        <td class="${isFire ? 'fire-yes' : 'fire-no'}">${isFire ? 'FIRE!' + addtext  : '출근'}</td>
                     `;
                 }
 
                 currentAssets = totalAssets;
             }
 
+
             if (fireYear === -1) {
                 errorDiv.textContent = '⚠️ 50년 이내 FIRE가 불가능합니다!';
                 errorDiv.style.display = 'block';
-                resultBody.innerHTML = '';
-                return;
+                // 50년이 지나도 FIRE가 안 되면 마지막 행 추가
+                const finalRow = resultBody.insertRow();
+                finalRow.innerHTML = `
+                    <td>50년</td>
+                    <td class="number">${Math.round(currentIncome).toLocaleString()}</td>
+                    <td class="number">${Math.round(currentExpense).toLocaleString()}</td>
+                    <td class="number">${Math.round(monthlySavings).toLocaleString()}</td>
+                    <td class="number">${Math.round(assetGrowth).toLocaleString()}</td>
+                    <td class="number">${Math.round(currentAssets).toLocaleString()}</td>
+                    <td class="number">${Math.round(requiredAssets).toLocaleString()}</td>
+                    <td class="fire-no">출근</td>
+                `;
+            } else if (fireYear > 0) {
+                errorDiv.textContent = `🎉 FIRE 달성 예상 연차: ${fireYear}년차!`;
+                errorDiv.style.display = 'block';
+            } else if (fireYear === 0) {
+                errorDiv.textContent = `💰 이미 FIRE를 달성하셨습니다! (0년차)`;
+                errorDiv.style.display = 'block';
             }
         }
 
         // 페이지 로드 시 자동 계산
-        window.onload = calculate;
+        window.onload = () =>{
+            setInitialValuesFromURL();
+            calculate();
+        }
+
+
     </script>
 </body>
 </html>
