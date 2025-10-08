@@ -82,13 +82,35 @@
                 transition: transform 0.2s, box-shadow 0.2s;
                 margin-top: 10px;
             }
-
             .containerfire .calculate-btn:hover {
                 transform: translateY(-2px);
                 box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
             }
 
             .containerfire .calculate-btn:active {
+                transform: translateY(0);
+            }
+
+            .containerfire .copy-result-btn {
+                grid-column: 1 / -1;
+                padding: 15px 30px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                border: none;
+                border-radius: 10px;
+                font-size: 18px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: transform 0.2s, box-shadow 0.2s;
+                margin-top: 10px;
+            }
+
+            .containerfire .copy-result-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+            }
+
+            .containerfire .copy-result-btn:active   {
                 transform: translateY(0);
             }
 
@@ -157,7 +179,7 @@
             .containerfire table {
                 font-size: 0.85em;
             }
-    /* 🌟 첫 번째 컬럼 고정 핵심 스타일 🌟 */
+            /* 🌟 첫 번째 컬럼 고정 핵심 스타일 🌟 */
             .containerfire th:first-child,
             .containerfire td:first-child {
                 position: sticky; /* 고정 위치 설정 */
@@ -201,12 +223,12 @@
             <div class="input-section">
                 <div class="input-group">
                     <label for="income">수입 (만원)</label>
-                    <input type="number" id="income" value="650" step="1" oninput="calculate()">
+                    <input type="number" id="income" value="450" step="1" oninput="calculate()">
                 </div>
 
                 <div class="input-group">
                     <label for="expense">지출 (만원)</label>
-                    <input type="number" id="expense" value="350" step="1" oninput="calculate()">
+                    <input type="number" id="expense" value="200" step="1" oninput="calculate()">
                 </div>
 
                 <div class="input-group">
@@ -221,7 +243,7 @@
 
                 <div class="input-group">
                     <label for="assets">기존자산 (만원)</label>
-                    <input type="number" id="assets" value="19000" step="100" oninput="calculate()">
+                    <input type="number" id="assets" value="10000" step="100" oninput="calculate()">
                 </div>
 
                 <div class="input-group">
@@ -229,11 +251,17 @@
                     <input type="number" id="assetReturn" value="1.06" step="0.001" oninput="calculate()">
                 </div>
 
-                <button class="calculate-btn" onclick="calculate()">계산하기</button>
+                <div class="input-group">
+                    <label for="fireCondition">인출률</label>
+                    <input type="number" id="fireCondition" value="4" step="0.1" oninput="calculate()">
+                </div>
+
+                <!--button class="calculate-btn" onclick="calculate()">계산하기</button-->
+                <button class="copy-result-btn" id="copyResultUrl" onclick="copyResultUrlToClipboard()"> 결과 URL 공유(복사)  </button>
             </div>
 
             <div id="error" style="display:none;" class="error"></div>
-            <div id="explainadd" class="explain"><h6>수입, 지출:반올림하여 표시 (만원)<br> 필요 자산: 4%rule 적용</h6></div>
+            <div id="explainadd" class="explain"><h6>수입, 지출: 반올림하여 표시 (만원)<br> 필요 자산: 인출률 반영, 기본 4% rule 적용</h6></div>
 
             <div class="table-container">
                 <table id="resultTable">
@@ -269,7 +297,8 @@
                     'income_rate_param': 'incomeRate',
                     'inflation_rate_param': 'inflationRate',
                     'assets_param': 'assets',
-                    'asset_return_param': 'assetReturn'
+                    'asset_return_param': 'assetReturn',
+                    "fire_condition_param" : "fireCondition"
                 };
 
                 for (const paramName in paramMap) {
@@ -288,11 +317,62 @@
                 const expense = parseFloat(document.getElementById('expense').value);
                 const incomeRate = parseFloat(document.getElementById('incomeRate').value);
                 const inflationRate = parseFloat(document.getElementById('inflationRate').value);
-                const initialAssets = parseFloat(document.getElementById('assets').value);
-                const assetReturn = parseFloat(document.getElementById('assetReturn').value);
+                let initialAssets = parseFloat(document.getElementById('assets').value);
 
+                const assetReturn = parseFloat(document.getElementById('assetReturn').value);
+                const fireCondition = parseFloat(document.getElementById('fireCondition').value);
                 const errorDiv = document.getElementById('error');
                 const resultBody = document.getElementById('resultBody');
+                console.log(fireCondition)
+
+                if (isNaN(initialAssets)){
+                    initialAssets = 0;
+                }
+
+                console.log(income|| income <= 0)
+                if (isNaN(income)){
+                    console.log(income)
+                    errorDiv.textContent = '수입 조건을 확인해주세요';
+                    errorDiv.style.display = 'block';
+                    resultBody.innerHTML = '';
+                    return;
+                }
+
+                if (isNaN(expense) || expense <= 0 || expense >= income){
+                    console.log(income)
+                    errorDiv.textContent = '지출 조건을 확인해주세요';
+                    errorDiv.style.display = 'block';
+                    resultBody.innerHTML = '';
+                    return;
+                }
+
+                if (isNaN(incomeRate) || incomeRate < 1){
+                    errorDiv.textContent = '수입상승률 조건을 확인해주세요';
+                    errorDiv.style.display = 'block';
+                    resultBody.innerHTML = '';
+                    return;
+                }
+
+                if (isNaN(inflationRate) || inflationRate < 1){
+                    errorDiv.textContent = '물가상승률 조건을 확인해주세요';
+                    errorDiv.style.display = 'block';
+                    resultBody.innerHTML = '';
+                    return;
+                }
+
+                if (isNaN(assetReturn) || assetReturn < 1){
+                    errorDiv.textContent = '자산수익률 조건을 확인해주세요';
+                    errorDiv.style.display = 'block';
+                    resultBody.innerHTML = '';
+                    return;
+                }
+
+                if (isNaN(fireCondition) || fireCondition <= 0){
+                    errorDiv.textContent = '인출률 조건을 확인해주세요';
+                    errorDiv.style.display = 'block';
+                    resultBody.innerHTML = '';
+                    return;
+                }
 
                 // 에러 체크
                 if (inflationRate >= assetReturn) {
@@ -313,7 +393,7 @@
                 let requiredMonth = 12;
 
                 // 0년차 계산
-                const requiredAssets0 = expense * 12 / (assetReturn - 1);
+                const requiredAssets0 = expense * 12 * (100 / fireCondition); // 4% rule 적용
                 const isFire0 = currentAssets >= requiredAssets0;
 
                 if (isFire0) {
@@ -343,7 +423,7 @@
                     const monthlySavings = formatNumber(currentIncome - currentExpense);
                     const assetGrowth = formatNumber(currentAssets * assetReturn);
                     const totalAssets = formatNumber(assetGrowth + monthlySavings * 12);
-                    const requiredAssets = formatNumber(currentExpense * 12 / (assetReturn - 1));
+                    const requiredAssets = formatNumber(currentExpense * 12 *  (100 / fireCondition)); // 4% rule 적용
 
                     const isFire = totalAssets >= requiredAssets;
 
@@ -424,12 +504,68 @@
                         <td class="fire-no">출근</td>
                     `;
                 } else if (fireYear > 0) {
-                    errorDiv.textContent = `🎉 FIRE 달성 예상 연차: ${fireYear}년차! (${requiredMonth} 개월부터)`;
+                    errorDiv.textContent = `🎉 FIRE 달성 예상 연차: ${fireYear}년차! (${fireYear-1}년 ${requiredMonth} 개월부터)`;
                     errorDiv.style.display = 'block';
                 } else if (fireYear === 0) {
                     errorDiv.textContent = `💰 이미 FIRE를 달성하셨습니다! (0년차)`;
                     errorDiv.style.display = 'block';
                 }
+            }
+
+            function createURLWithCurrentValues() {
+                // 쿼리 파라미터와 해당 input 필드의 ID 매핑 (setInitialValuesFromURL 함수에서 사용된 것과 동일)
+                const paramMap = {
+                    'income_param': 'income',
+                    'expense_param': 'expense',
+                    'income_rate_param': 'incomeRate',
+                    'inflation_rate_param': 'inflationRate',
+                    'assets_param': 'assets',
+                    'asset_return_param': 'assetReturn',
+                    "fire_condition_param": "fireCondition"
+                };
+
+                const urlParams = new URLSearchParams();
+
+                for (const paramName in paramMap) {
+                    const inputId = paramMap[paramName];
+                    const inputElement = document.getElementById(inputId);
+
+                    // 해당 ID의 input 요소가 존재하고 값이 있는 경우에만 처리
+                    if (inputElement && inputElement.value) {
+                            const inputValue = inputElement.value.trim();
+
+                        // 유효성 검사 (setInitialValuesFromURL 함수와 유사하게 비어있지 않고, 숫자인 경우만 추가하는 것이 일반적)
+                        // 필요에 따라 이 유효성 검사 로직을 조정할 수 있습니다.
+                        if (inputValue !== '' && !isNaN(inputValue)) {
+                            // 쿼리 파라미터에 값을 설정합니다.
+                            urlParams.set(paramName, inputValue);
+                        }
+                    }
+                }
+
+                // 현재 페이지의 기본 URL을 가져옵니다.
+                const baseUrl = window.location.origin + window.location.pathname;
+
+                // 쿼리 파라미터 문자열을 붙여 전체 URL을 완성합니다.
+                const newUrl = baseUrl + '?' + urlParams.toString();
+
+                return newUrl;
+            }
+            function copyResultUrlToClipboard() {
+                // 1. 현재 값으로 URL 생성
+                const newUrl = createURLWithCurrentValues();
+
+                // 2. 클립보드 복사
+                navigator.clipboard.writeText(newUrl)
+                    .then(() => {
+                    // 복사 성공 시 알림
+                    alert("결과 URL이 클립보드에 복사되었습니다. 📋");
+                })
+                .catch(err => {
+                // 복사 실패 시 (예: http 환경, 권한 문제)
+                console.error('클립보드 복사 실패:', err);
+                    alert("URL 복사에 실패했습니다. 콘솔을 확인하세요.");
+                });
             }
 
             // 페이지 로드 시 자동 계산
