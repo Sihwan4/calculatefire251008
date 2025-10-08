@@ -5,440 +5,440 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FIRE 계산기</title>
 </head>
-<body>
+    <body>
 
-    <style>
+        <style>
 
-        .containerfire {
-            margin: 5;
-            box-sizing: border-box;
+            .containerfire {
+                margin: 5;
+                box-sizing: border-box;
 
 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 95vh;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                min-height: 95vh;
 
-            max-width: 2400px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            padding: 10px;
-        }
+                max-width: 2400px;
+                margin: 0 auto;
+                background: white;
+                border-radius: 20px;
+                box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+                padding: 10px;
+            }
 
-        .containerfire h1 {
-            text-align: center;
-            color: #667eea;
-            margin-bottom: 10px;
-            font-size: 2.5em;
-        }
+            .containerfire h1 {
+                text-align: center;
+                color: #667eea;
+                margin-bottom: 10px;
+                font-size: 2.5em;
+            }
 
-        .containerfire .input-section {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 20px;
-            margin-bottom: 5px;
-            padding: 5px;
-            background: #f8f9fa;
-            border-radius: 5px;
-        }
+            .containerfire .input-section {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+                gap: 20px;
+                margin-bottom: 5px;
+                padding: 5px;
+                background: #f8f9fa;
+                border-radius: 5px;
+            }
 
-        .containerfire .input-group {
-            display: flex;
-            flex-direction: column;
-        }
+            .containerfire .input-group {
+                display: flex;
+                flex-direction: column;
+            }
 
-        .containerfire label {
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #495057;
-            font-size: 0.95em;
-        }
+            .containerfire label {
+                font-weight: 600;
+                margin-bottom: 8px;
+                color: #495057;
+                font-size: 0.95em;
+            }
 
-        .containerfire input {
-            padding: 12px;
-            border: 2px solid #dee2e6;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: all 0.3s;
-        }
+            .containerfire input {
+                padding: 12px;
+                border: 2px solid #dee2e6;
+                border-radius: 8px;
+                font-size: 16px;
+                transition: all 0.3s;
+            }
 
-        .containerfire input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
+            .containerfire input:focus {
+                outline: none;
+                border-color: #667eea;
+                box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            }
 
-        .containerfire .calculate-btn {
-            grid-column: 1 / -1;
-            padding: 15px 30px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            margin-top: 10px;
-        }
+            .containerfire .calculate-btn {
+                grid-column: 1 / -1;
+                padding: 15px 30px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                border: none;
+                border-radius: 10px;
+                font-size: 18px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: transform 0.2s, box-shadow 0.2s;
+                margin-top: 10px;
+            }
 
-        .containerfire .calculate-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-        }
+            .containerfire .calculate-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+            }
 
-        .containerfire .calculate-btn:active {
-            transform: translateY(0);
-        }
+            .containerfire .calculate-btn:active {
+                transform: translateY(0);
+            }
 
-        .containerfire .error {
-            background: #fee;
-            border: 2px solid #fcc;
-            color: #c33;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            text-align: center;
-            font-weight: 600;
-        }
+            .containerfire .error {
+                background: #fee;
+                border: 2px solid #fcc;
+                color: #c33;
+                padding: 15px;
+                border-radius: 10px;
+                margin-bottom: 20px;
+                text-align: center;
+                font-weight: 600;
+            }
 
-        .containerfire .table-container {
-            overflow-x: auto;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
+            .containerfire .table-container {
+                overflow-x: auto;
+                border-radius: 15px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            }
 
-        .containerfire table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-        }
+            .containerfire table {
+                width: 100%;
+                border-collapse: collapse;
+                background: white;
+            }
 
-        .containerfire th {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 15px;
-            text-align: center;
-            font-weight: 600;
-            font-size: 0.9em;
-        }
+            .containerfire th {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 15px;
+                text-align: center;
+                font-weight: 600;
+                font-size: 0.9em;
+            }
 
-        .containerfire td {
-            padding: 12px;
-            text-align: right;
-            border-bottom: 1px solid #e9ecef;
-        }
+            .containerfire td {
+                padding: 12px;
+                text-align: right;
+                border-bottom: 1px solid #e9ecef;
+            }
 
-        .containerfire td:first-child {
-            text-align: center;
-            font-weight: 600;
-            color: #667eea;
-        }
+            .containerfire td:first-child {
+                text-align: center;
+                font-weight: 600;
+                color: #667eea;
+            }
 
-        .containerfire tr:hover {
-            background: #f8f9fa;
-        }
+            .containerfire tr:hover {
+                background: #f8f9fa;
+            }
 
-        .containerfire .fire-yes {
-            background: #d4edda !important;
-            font-weight: 700;
-            color: #155724;
-        }
+            .containerfire .fire-yes {
+                background: #d4edda !important;
+                font-weight: 700;
+                color: #155724;
+            }
 
-        .containerfire .fire-no {
-            color: #721c24;
-        }
+            .containerfire .fire-no {
+                color: #721c24;
+            }
 
-        .containerfire .number {
-            font-family: 'Courier New', monospace;
-        }
+            .containerfire .number {
+                font-family: 'Courier New', monospace;
+            }
 
-        .containerfire table {
-            font-size: 0.85em;
-        }
-/* 🌟 첫 번째 컬럼 고정 핵심 스타일 🌟 */
-        .containerfire th:first-child,
-        .containerfire td:first-child {
-            position: sticky; /* 고정 위치 설정 */
-            left: 0; /* 왼쪽 끝에 고정 */
-            z-index: 2; /* 스크롤되는 다른 셀 위에 표시 */
+            .containerfire table {
+                font-size: 0.85em;
+            }
+    /* 🌟 첫 번째 컬럼 고정 핵심 스타일 🌟 */
+            .containerfire th:first-child,
+            .containerfire td:first-child {
+                position: sticky; /* 고정 위치 설정 */
+                left: 0; /* 왼쪽 끝에 고정 */
+                z-index: 2; /* 스크롤되는 다른 셀 위에 표시 */
 
-        }
+            }
 
-        /* 헤더 셀 고정 시 배경과 그림자 설정 */
-        .containerfire th:first-child {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* 배경색 유지 */
-            box-shadow: 2px 0 3px rgba(0, 0, 0, 0.1); /* 고정 경계에 그림자 추가 */
-        }
+            /* 헤더 셀 고정 시 배경과 그림자 설정 */
+            .containerfire th:first-child {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* 배경색 유지 */
+                box-shadow: 2px 0 3px rgba(0, 0, 0, 0.1); /* 고정 경계에 그림자 추가 */
+            }
 
-        /* 데이터 셀 고정 시 배경과 그림자 설정 */
-        .containerfire td:first-child {
-            background-color: #f8f9fa; /* 배경색: 테이블 배경과 비슷하게 설정 */
-            box-shadow: 2px 0 3px rgba(0, 0, 0, 0.1);
-        }
+            /* 데이터 셀 고정 시 배경과 그림자 설정 */
+            .containerfire td:first-child {
+                background-color: #f8f9fa; /* 배경색: 테이블 배경과 비슷하게 설정 */
+                box-shadow: 2px 0 3px rgba(0, 0, 0, 0.1);
+            }
 
-        /* 0년차 행의 고정된 셀에 대한 배경 처리 */
-        .containerfire #resultBody tr:first-child td:first-child {
-            background-color: white;
-        }
+            /* 0년차 행의 고정된 셀에 대한 배경 처리 */
+            .containerfire #resultBody tr:first-child td:first-child {
+                background-color: white;
+            }
 
-        /* FIRE 달성 행의 배경색과 고정 셀의 배경색 통일 */
-        .containerfire .fire-yes td:first-child {
-            background-color: #d4edda !important;
-        }
+            /* FIRE 달성 행의 배경색과 고정 셀의 배경색 통일 */
+            .containerfire .fire-yes td:first-child {
+                background-color: #d4edda !important;
+            }
 
-        .containerfire .explain {
-            text-align: left;
-            color: #6c757d;
-            margin-top: 10px;
-            font-size: 0.85em;
-        }
-    </style>
-    <div class="containerfire">
-        <h1>🔥 FIRE 계산기</h1>
+            .containerfire .explain {
+                text-align: left;
+                color: #6c757d;
+                margin-top: 10px;
+                font-size: 0.85em;
+            }
+        </style>
+        <div class="containerfire">
+            <h1>🔥 FIRE 계산기</h1>
 
-        <div class="input-section">
-            <div class="input-group">
-                <label for="income">수입 (만원)</label>
-                <input type="number" id="income" value="650" step="1" oninput="calculate()">
+            <div class="input-section">
+                <div class="input-group">
+                    <label for="income">수입 (만원)</label>
+                    <input type="number" id="income" value="650" step="1" oninput="calculate()">
+                </div>
+
+                <div class="input-group">
+                    <label for="expense">지출 (만원)</label>
+                    <input type="number" id="expense" value="350" step="1" oninput="calculate()">
+                </div>
+
+                <div class="input-group">
+                    <label for="incomeRate">수입상승률</label>
+                    <input type="number" id="incomeRate" value="1.05" step="0.01" oninput="calculate()">
+                </div>
+
+                <div class="input-group">
+                    <label for="inflationRate">물가상승률</label>
+                    <input type="number" id="inflationRate" value="1.03" step="0.001" oninput="calculate()">
+                </div>
+
+                <div class="input-group">
+                    <label for="assets">기존자산 (만원)</label>
+                    <input type="number" id="assets" value="19000" step="100" oninput="calculate()">
+                </div>
+
+                <div class="input-group">
+                    <label for="assetReturn">자산수익률</label>
+                    <input type="number" id="assetReturn" value="1.06" step="0.001" oninput="calculate()">
+                </div>
+
+                <button class="calculate-btn" onclick="calculate()">계산하기</button>
             </div>
 
-            <div class="input-group">
-                <label for="expense">지출 (만원)</label>
-                <input type="number" id="expense" value="350" step="1" oninput="calculate()">
-            </div>
+            <div id="error" style="display:none;" class="error"></div>
+            <div id="explainadd" class="explain"><h6>수입, 지출:반올림하여 표시 (만원)<br> 필요 자산: 4%rule 적용</h6></div>
 
-            <div class="input-group">
-                <label for="incomeRate">수입상승률</label>
-                <input type="number" id="incomeRate" value="1.05" step="0.01" oninput="calculate()">
+            <div class="table-container">
+                <table id="resultTable">
+                    <thead>
+                        <tr>
+                            <th>연차</th>
+                            <th>수입</th>
+                            <th>지출</th>
+                            <th>월 저축</th>
+                            <th>자산변화</th>
+                            <th>저축+자산</th>
+                            <th>은퇴필요자산</th>
+                            <th>FIRE여부</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resultBody">
+                    </tbody>
+                </table>
             </div>
-
-            <div class="input-group">
-                <label for="inflationRate">물가상승률</label>
-                <input type="number" id="inflationRate" value="1.03" step="0.001" oninput="calculate()">
-            </div>
-
-            <div class="input-group">
-                <label for="assets">기존자산 (만원)</label>
-                <input type="number" id="assets" value="19000" step="100" oninput="calculate()">
-            </div>
-
-            <div class="input-group">
-                <label for="assetReturn">자산수익률</label>
-                <input type="number" id="assetReturn" value="1.06" step="0.001" oninput="calculate()">
-            </div>
-
-            <button class="calculate-btn" onclick="calculate()">계산하기</button>
         </div>
 
-        <div id="error" style="display:none;" class="error"></div>
-        <div id="explainadd" class="explain"><h6>수입, 지출:반올림하여 표시 (만원)<br> 필요 자산: 4%rule 적용</h6></div>
-
-        <div class="table-container">
-            <table id="resultTable">
-                <thead>
-                    <tr>
-                        <th>연차</th>
-                        <th>수입</th>
-                        <th>지출</th>
-                        <th>월 저축</th>
-                        <th>자산변화</th>
-                        <th>저축+자산</th>
-                        <th>은퇴필요자산</th>
-                        <th>FIRE여부</th>
-                    </tr>
-                </thead>
-                <tbody id="resultBody">
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <script>
-        function formatNumber(num) {
-            return Math.round(num * 100) / 100;
-        }
-
-        function setInitialValuesFromURL() {
-            const urlParams = new URLSearchParams(window.location.search);
-            // 쿼리 파라미터와 해당 input 필드의 ID 매핑
-            const paramMap = {
-                'income_param': 'income',
-                'expense_param': 'expense',
-                'income_rate_param': 'incomeRate',
-                'inflation_rate_param': 'inflationRate',
-                'assets_param': 'assets',
-                'asset_return_param': 'assetReturn'
-            };
-
-            for (const paramName in paramMap) {
-                const inputId = paramMap[paramName];
-                const paramValue = urlParams.get(paramName);
-
-                if (paramValue !== null && paramValue.trim() !== '' && !isNaN(paramValue)) {
-                    // 값이 유효하면 해당 input 필드에 설정
-                    document.getElementById(inputId).value = paramValue;
-                }
-            }
-        }
-
-        function calculate() {
-            const income = parseFloat(document.getElementById('income').value);
-            const expense = parseFloat(document.getElementById('expense').value);
-            const incomeRate = parseFloat(document.getElementById('incomeRate').value);
-            const inflationRate = parseFloat(document.getElementById('inflationRate').value);
-            const initialAssets = parseFloat(document.getElementById('assets').value);
-            const assetReturn = parseFloat(document.getElementById('assetReturn').value);
-
-            const errorDiv = document.getElementById('error');
-            const resultBody = document.getElementById('resultBody');
-
-            // 에러 체크
-            if (inflationRate >= assetReturn) {
-                errorDiv.textContent = '⚠️ 물가상승률이 자산수익률보다 높거나 같으면 FIRE가 불가능합니다!';
-                errorDiv.style.display = 'block';
-                resultBody.innerHTML = '';
-                return;
+        <script>
+            function formatNumber(num) {
+                return Math.round(num * 100) / 100;
             }
 
+            function setInitialValuesFromURL() {
+                const urlParams = new URLSearchParams(window.location.search);
+                // 쿼리 파라미터와 해당 input 필드의 ID 매핑
+                const paramMap = {
+                    'income_param': 'income',
+                    'expense_param': 'expense',
+                    'income_rate_param': 'incomeRate',
+                    'inflation_rate_param': 'inflationRate',
+                    'assets_param': 'assets',
+                    'asset_return_param': 'assetReturn'
+                };
 
-            errorDiv.style.display = 'none';
-            resultBody.innerHTML = '';
+                for (const paramName in paramMap) {
+                    const inputId = paramMap[paramName];
+                    const paramValue = urlParams.get(paramName);
 
-            let currentIncome = income;
-            let currentExpense = expense;
-            let currentAssets = initialAssets;
-            let fireYear = -1;
-            let requiredMonth = 12;
-
-            // 0년차 계산
-            const requiredAssets0 = expense * 12 / (assetReturn - 1);
-            const isFire0 = currentAssets >= requiredAssets0;
-
-            if (isFire0) {
-                fireYear = 0;
-            }
-
-            // 0년차 행 추가
-            const row0 = resultBody.insertRow();
-            row0.innerHTML = `
-                <td>0년</td>
-                <td class="number">-</td>
-                <td class="number">-</td>
-                <td class="number">-</td>
-                <td class="number">-</td>
-                <td class="number">${formatNumber(currentAssets).toLocaleString()}</td>
-                <td class="number">${formatNumber(requiredAssets0).toLocaleString()}</td>
-                <td class="${isFire0 ? 'fire-yes' : 'fire-no'}">${isFire0 ? 'FIRE!' : '-'}</td>
-            `;
-
-            // 최대 50년까지 계산하되, FIRE 달성 후 1년까지만 표시
-            let yearsPastFire = 0;
-
-            for (let year = 1; year <= 50; year++) {
-                currentIncome = formatNumber(income * Math.pow(incomeRate, year));
-                currentExpense = formatNumber(expense * Math.pow(inflationRate, year));
-
-                const monthlySavings = formatNumber(currentIncome - currentExpense);
-                const assetGrowth = formatNumber(currentAssets * assetReturn);
-                const totalAssets = formatNumber(assetGrowth + monthlySavings * 12);
-                const requiredAssets = formatNumber(currentExpense * 12 / (assetReturn - 1));
-
-                const isFire = totalAssets >= requiredAssets;
-
-                if (isFire && fireYear === -1) {
-                    fireYear = year;
-                }
-
-                // FIRE 달성 후 1년까지만 표시
-                if (fireYear !== -1 && year > fireYear) {
-                    yearsPastFire++;
-                    if (yearsPastFire > 1) {
-                        break;
+                    if (paramValue !== null && paramValue.trim() !== '' && !isNaN(paramValue)) {
+                        // 값이 유효하면 해당 input 필드에 설정
+                        document.getElementById(inputId).value = paramValue;
                     }
                 }
+            }
+
+            function calculate() {
+                const income = parseFloat(document.getElementById('income').value);
+                const expense = parseFloat(document.getElementById('expense').value);
+                const incomeRate = parseFloat(document.getElementById('incomeRate').value);
+                const inflationRate = parseFloat(document.getElementById('inflationRate').value);
+                const initialAssets = parseFloat(document.getElementById('assets').value);
+                const assetReturn = parseFloat(document.getElementById('assetReturn').value);
+
+                const errorDiv = document.getElementById('error');
+                const resultBody = document.getElementById('resultBody');
+
+                // 에러 체크
+                if (inflationRate >= assetReturn) {
+                    errorDiv.textContent = '⚠️ 물가상승률이 자산수익률보다 높거나 같으면 FIRE가 불가능합니다!';
+                    errorDiv.style.display = 'block';
+                    resultBody.innerHTML = '';
+                    return;
+                }
 
 
-                // 최소 5년은 표시
-                if (year <= 5 || fireYear === -1 || year <= fireYear + 1) {
-                    const row = resultBody.insertRow();
+                errorDiv.style.display = 'none';
+                resultBody.innerHTML = '';
 
-                    const roundedCurrentIncome = Math.round(currentIncome); // 반올림
-                    const roundedCurrentExpense = Math.round(currentExpense); // 반올림
-                    const roundedMonthlySavings = Math.round(monthlySavings); // 반올림
-                    const roundedAssetGrowth = Math.round(assetGrowth); // 반올림
-                    const roundedTotalAssets = Math.round(totalAssets); // 반올림
-                    const roundedRequiredAssets = Math.round(requiredAssets); // 반올림
-                    /*
-                    console.log(year);
-                    console.log((currentAssets)  - requiredAssets)
-                    console.log(currentAssets);
-                    console.log(monthlySavings);
-                    console.log("_______");
-                    */
+                let currentIncome = income;
+                let currentExpense = expense;
+                let currentAssets = initialAssets;
+                let fireYear = -1;
+                let requiredMonth = 12;
 
-                    let monthlyassets = currentAssets;
-                    for(let imonth=0; imonth<12; imonth++){
-                        monthlyassets = monthlyassets * (1+ (assetReturn-1)/12) + monthlySavings;
-                        //console.log(imonth + ": " + monthlyassets + " / " + requiredAssets);
-                        if(monthlyassets >= requiredAssets){
-                            //console.log("목표 달성!" + (imonth+1) + "개월차");
-                            requiredMonth = imonth + 1;
-                            console.log(requiredMonth)
+                // 0년차 계산
+                const requiredAssets0 = expense * 12 / (assetReturn - 1);
+                const isFire0 = currentAssets >= requiredAssets0;
+
+                if (isFire0) {
+                    fireYear = 0;
+                }
+
+                // 0년차 행 추가
+                const row0 = resultBody.insertRow();
+                row0.innerHTML = `
+                    <td>0년</td>
+                    <td class="number">-</td>
+                    <td class="number">-</td>
+                    <td class="number">-</td>
+                    <td class="number">-</td>
+                    <td class="number">${formatNumber(currentAssets).toLocaleString()}</td>
+                    <td class="number">${formatNumber(requiredAssets0).toLocaleString()}</td>
+                    <td class="${isFire0 ? 'fire-yes' : 'fire-no'}">${isFire0 ? 'FIRE!' : '-'}</td>
+                `;
+
+                // 최대 50년까지 계산하되, FIRE 달성 후 1년까지만 표시
+                let yearsPastFire = 0;
+
+                for (let year = 1; year <= 50; year++) {
+                    currentIncome = formatNumber(income * Math.pow(incomeRate, year));
+                    currentExpense = formatNumber(expense * Math.pow(inflationRate, year));
+
+                    const monthlySavings = formatNumber(currentIncome - currentExpense);
+                    const assetGrowth = formatNumber(currentAssets * assetReturn);
+                    const totalAssets = formatNumber(assetGrowth + monthlySavings * 12);
+                    const requiredAssets = formatNumber(currentExpense * 12 / (assetReturn - 1));
+
+                    const isFire = totalAssets >= requiredAssets;
+
+                    if (isFire && fireYear === -1) {
+                        fireYear = year;
+                    }
+
+                    // FIRE 달성 후 1년까지만 표시
+                    if (fireYear !== -1 && year > fireYear) {
+                        yearsPastFire++;
+                        if (yearsPastFire > 1) {
                             break;
                         }
                     }
-                    // console.log(requiredMonth)
-                    const addtext = year === fireYear ? "<br>" + requiredMonth +"개월부터" : "";
 
-                    row.innerHTML = `
-                        <td>${year}년</td>
-                        <td class="number">${roundedCurrentIncome.toLocaleString()}</td>
-                        <td class="number">${roundedCurrentExpense.toLocaleString()}</td>
-                        <td class="number">${roundedMonthlySavings.toLocaleString()}</td>
-                        <td class="number">${roundedAssetGrowth.toLocaleString()}</td>
-                        <td class="number">${roundedTotalAssets.toLocaleString()}</td>
-                        <td class="number">${roundedRequiredAssets.toLocaleString()}</td>
-                        <td class="${isFire ? 'fire-yes' : 'fire-no'}">${isFire ? 'FIRE!' + addtext  : '출근'}</td>
-                    `;
+
+                    // 최소 5년은 표시
+                    if (year <= 5 || fireYear === -1 || year <= fireYear + 1) {
+                        const row = resultBody.insertRow();
+
+                        const roundedCurrentIncome = Math.round(currentIncome); // 반올림
+                        const roundedCurrentExpense = Math.round(currentExpense); // 반올림
+                        const roundedMonthlySavings = Math.round(monthlySavings); // 반올림
+                        const roundedAssetGrowth = Math.round(assetGrowth); // 반올림
+                        const roundedTotalAssets = Math.round(totalAssets); // 반올림
+                        const roundedRequiredAssets = Math.round(requiredAssets); // 반올림
+                        /*
+                        console.log(year);
+                        console.log((currentAssets)  - requiredAssets)
+                        console.log(currentAssets);
+                        console.log(monthlySavings);
+                        console.log("_______");
+                        */
+
+                        let monthlyassets = currentAssets;
+                        for(let imonth=0; imonth<12; imonth++){
+                            monthlyassets = monthlyassets * (1+ (assetReturn-1)/12) + monthlySavings;
+                            //console.log(imonth + ": " + monthlyassets + " / " + requiredAssets);
+                            if((monthlyassets >= requiredAssets) & (fireYear === year)){
+                                //console.log("목표 달성!" + (imonth+1) + "개월차");
+                                requiredMonth = imonth + 1;
+                                console.log(requiredMonth)
+                                break;
+                            }
+                        }
+                        // console.log(requiredMonth)
+                        const addtext = year === fireYear ? "<br>" + requiredMonth +"개월부터" : "";
+
+                        row.innerHTML = `
+                            <td>${year}년</td>
+                            <td class="number">${roundedCurrentIncome.toLocaleString()}</td>
+                            <td class="number">${roundedCurrentExpense.toLocaleString()}</td>
+                            <td class="number">${roundedMonthlySavings.toLocaleString()}</td>
+                            <td class="number">${roundedAssetGrowth.toLocaleString()}</td>
+                            <td class="number">${roundedTotalAssets.toLocaleString()}</td>
+                            <td class="number">${roundedRequiredAssets.toLocaleString()}</td>
+                            <td class="${isFire ? 'fire-yes' : 'fire-no'}">${isFire ? 'FIRE!' + addtext  : '출근'}</td>
+                        `;
+                    }
+
+                    currentAssets = totalAssets;
                 }
 
-                currentAssets = totalAssets;
+
+                if (fireYear === -1) {
+                    errorDiv.textContent = '⚠️ 50년 이내 FIRE가 불가능합니다!';
+                    errorDiv.style.display = 'block';
+                    // 50년이 지나도 FIRE가 안 되면 마지막 행 추가
+                    const finalRow = resultBody.insertRow();
+                    finalRow.innerHTML = `
+                        <td>50년</td>
+                        <td class="number">${Math.round(currentIncome).toLocaleString()}</td>
+                        <td class="number">${Math.round(currentExpense).toLocaleString()}</td>
+                        <td class="number">${Math.round(monthlySavings).toLocaleString()}</td>
+                        <td class="number">${Math.round(assetGrowth).toLocaleString()}</td>
+                        <td class="number">${Math.round(currentAssets).toLocaleString()}</td>
+                        <td class="number">${Math.round(requiredAssets).toLocaleString()}</td>
+                        <td class="fire-no">출근</td>
+                    `;
+                } else if (fireYear > 0) {
+                    errorDiv.textContent = `🎉 FIRE 달성 예상 연차: ${fireYear}년차! (${requiredMonth} 개월부터)`;
+                    errorDiv.style.display = 'block';
+                } else if (fireYear === 0) {
+                    errorDiv.textContent = `💰 이미 FIRE를 달성하셨습니다! (0년차)`;
+                    errorDiv.style.display = 'block';
+                }
+            }
+
+            // 페이지 로드 시 자동 계산
+            window.onload = () =>{
+                setInitialValuesFromURL();
+                calculate();
             }
 
 
-            if (fireYear === -1) {
-                errorDiv.textContent = '⚠️ 50년 이내 FIRE가 불가능합니다!';
-                errorDiv.style.display = 'block';
-                // 50년이 지나도 FIRE가 안 되면 마지막 행 추가
-                const finalRow = resultBody.insertRow();
-                finalRow.innerHTML = `
-                    <td>50년</td>
-                    <td class="number">${Math.round(currentIncome).toLocaleString()}</td>
-                    <td class="number">${Math.round(currentExpense).toLocaleString()}</td>
-                    <td class="number">${Math.round(monthlySavings).toLocaleString()}</td>
-                    <td class="number">${Math.round(assetGrowth).toLocaleString()}</td>
-                    <td class="number">${Math.round(currentAssets).toLocaleString()}</td>
-                    <td class="number">${Math.round(requiredAssets).toLocaleString()}</td>
-                    <td class="fire-no">출근</td>
-                `;
-            } else if (fireYear > 0) {
-                errorDiv.textContent = `🎉 FIRE 달성 예상 연차: ${fireYear}년차!`;
-                errorDiv.style.display = 'block';
-            } else if (fireYear === 0) {
-                errorDiv.textContent = `💰 이미 FIRE를 달성하셨습니다! (0년차)`;
-                errorDiv.style.display = 'block';
-            }
-        }
-
-        // 페이지 로드 시 자동 계산
-        window.onload = () =>{
-            setInitialValuesFromURL();
-            calculate();
-        }
-
-
-    </script>
-</body>
+        </script>
+    </body>
 </html>
